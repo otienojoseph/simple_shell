@@ -38,7 +38,8 @@ int main(int ac, char **av)
 			args = tokenize(line, " \0\n\t");
 			if (strcmp("exit", args[0]) == 0)
 			{
-				break;
+				free(line);
+				exit(0);
 			}
 			free(line);
 
