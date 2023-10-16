@@ -9,8 +9,8 @@
 int check_exec_path(char **str)
 {
 	char *path_copy, *token, *full_command;
-	static char path_buf[1024], buffer[1000];
-	unsigned int i = 0;
+	char path_buf[BUFFER], buffer[BUFFER];
+	unsigned int i;
 
 	if (access(*str, X_OK) == 0)
 		return (1);
@@ -31,9 +31,9 @@ int check_exec_path(char **str)
 		strcpy(full_command, token);
 		strcat(full_command, "/");
 		strcat(full_command, *str);
-		printf("full command: %s", full_command);
 		if (access(full_command, X_OK) == 0)
 		{
+			i = 0;
 			while (i < strlen(full_command))
 			{
 				buffer[i] = full_command[i];
