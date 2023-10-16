@@ -10,7 +10,7 @@
 int main(int ac, char **av)
 {
 	char *line, **args;
-	char *delimeter = " \0\n\t";
+	char *delimeter = " \n\t";
 	size_t bufsize;
 	ssize_t chars_count;
 	int i;
@@ -18,8 +18,8 @@ int main(int ac, char **av)
 	(void)ac;
 
 	line = NULL;
-	bufsize = 0;
 	args = NULL;
+	bufsize = 0;
 	chars_count = 0;
 
 	while (1)
@@ -39,9 +39,7 @@ int main(int ac, char **av)
 		else
 		{
 			/* line[strlen(line) + 1] = '\0'; */
-			/* can't assign char * from char ** */
 			args = tokenize(line, delimeter);
-			printf("args[0]: %s", args[0]);
 			if (strcmp(args[0], "exit") == 0)
 			{
 				free(line);
@@ -59,8 +57,6 @@ int main(int ac, char **av)
 			{
 				execute(&args[0], av[0]);
 			}
-
-
 		}
 		line = NULL;
 		bufsize = 0;
@@ -72,7 +68,7 @@ int main(int ac, char **av)
 /**
  * tokenize - tokenize string on delimeter
  * @line: String to be tokenized
- * @s: delimeter given
+ * @delimeter: delimeter given
  * Return: Array of strings
 */
 char **tokenize(char *line, const char *delimeter)
@@ -119,19 +115,17 @@ int execute(char **args, char *av)
 	pid_t pid = 0;
 	int status = 0;
 
-	(void) av;
-
 	pid = fork();
 
 	if (pid == 0)
 	{
 		if (execve(args[0], args, environ) == -1)
-			perror("Execve failure: -1");
+			perror(av);
 		exit(EXIT_FAILURE);
 	}
 	else if (pid < 0)
 	{
-		perror("Pid returned 0");
+		perror(av);
 		return (1);
 	}
 	else
