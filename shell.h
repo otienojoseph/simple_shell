@@ -16,5 +16,7 @@ extern char **environ;
 char **tokenize(char *line, const char *delimeter);
 int check_exec_path(char **str);
 int execute(char **args, char *av);
+void get_env(char **env);
+int space_check(char *line);
 
 #endif

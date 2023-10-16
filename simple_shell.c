@@ -32,18 +32,23 @@ int main(int ac, char **av)
 			free(line);
 			return (0);
 		}
-		/* else if (*line == '\n')
+		else if (space_check(line) == 1)
 		{
-			free(line);
-		} */
+				continue;
+		}
+
 		else
 		{
-			/* line[strlen(line) + 1] = '\0'; */
 			args = tokenize(line, delimeter);
 			if (strcmp(args[0], "exit") == 0)
 			{
 				free(line);
 				exit(EXIT_SUCCESS);
+			}
+			else if (strcmp(args[0], "env") == 0)
+			{
+				get_env(environ);
+				continue;
 			}
 
 			i = 0;
@@ -63,76 +68,4 @@ int main(int ac, char **av)
 		free(line);
 	}
 	return (0);
-}
-
-/**
- * tokenize - tokenize string on delimeter
- * @line: String to be tokenized
- * @delimeter: delimeter given
- * Return: Array of strings
-*/
-char **tokenize(char *line, const char *delimeter)
-{
-	char *token = NULL, **tokens = NULL;
-	int count = 0;
-
-	if (line == NULL)
-		return (NULL);
-	tokens = malloc(sizeof(char *) * strlen(line) + 1);
-
-	if (tokens == NULL)
-	{
-		perror("Memory Allocation Failed");
-		free(line);
-		free(tokens);
-		exit(EXIT_FAILURE);
-	}
-	token = strtok(line, delimeter);
-	while (token != NULL)
-	{
-		tokens[count] = malloc(strlen(token) + 1);
-		if (tokens[count] == NULL)
-		{
-			perror("Memory Allocation Failed");
-			free(tokens);
-			return (NULL);
-		}
-	strcpy(tokens[count++], token);
-	token = strtok(NULL, delimeter);
-	}
-	tokens[count] = NULL;
-	return (tokens);
-}
-
-/**
- * execute - creates child process for commands
- * @args: commands entered
- * @av: argument vector
- * Return: Status of process
-*/
-int execute(char **args, char *av)
-{
-	pid_t pid = 0;
-	int status = 0;
-
-	pid = fork();
-
-	if (pid == 0)
-	{
-		if (execve(args[0], args, environ) == -1)
-			perror(av);
-		exit(EXIT_FAILURE);
-	}
-	else if (pid < 0)
-	{
-		perror(av);
-		return (1);
-	}
-	else
-	{
-		do {
-			waitpid(pid, &status, WUNTRACED);
-		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
-	}
-	return (status);
 }
