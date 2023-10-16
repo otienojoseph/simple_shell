@@ -10,8 +10,10 @@
 int main(int ac, char **av)
 {
 	char *line, **args;
+	char *delimeter = " \0\n\t";
 	size_t bufsize;
 	ssize_t chars_count;
+	int i;
 
 	(void)ac;
 
@@ -28,30 +30,43 @@ int main(int ac, char **av)
 		if (chars_count == -1)
 		{
 			free(line);
-			return (EXIT_SUCCESS);
+			return (0);
 		}
-		else if (*line == '\n')
+		/* else if (*line == '\n')
+		{
 			free(line);
+		} */
 		else
 		{
-			line[strlen(line) - 1] = '\0';
-			args = tokenize(line, " \0\n\t");
-			if (strcmp("exit", args[0]) == 0)
+			/* line[strlen(line) + 1] = '\0'; */
+			/* can't assign char * from char ** */
+			args = tokenize(line, delimeter);
+			printf("args[0]: %s", args[0]);
+			if (strcmp(args[0], "exit") == 0)
 			{
 				free(line);
-				exit(0);
+				exit(EXIT_SUCCESS);
 			}
-			free(line);
 
-			execute(args, av[0]);
+			i = 0;
+			while (args[i] != NULL)
+			{
+				i++;
+				args[i] = strtok(NULL, delimeter);
+			}
+			
+			if (check_exec_path(&args[0]) == 1)
+			{
+				execute(&args[0], av[0]);
+			}
+
 
 		}
-		/*fflush(stdin);*/
 		line = NULL;
 		bufsize = 0;
 		free(line);
 	}
-	return (EXIT_SUCCESS);
+	return (0);
 }
 
 /**
@@ -60,36 +75,34 @@ int main(int ac, char **av)
  * @s: delimeter given
  * Return: Array of strings
 */
-char **tokenize(char *line, const char *s)
+char **tokenize(char *line, const char *delimeter)
 {
 	char *token = NULL, **tokens = NULL;
-	int buf_size = 0, count = 0;
+	int count = 0;
 
 	if (line == NULL)
 		return (NULL);
-	buf_size = strlen(line);
-	tokens = malloc(sizeof(char *) * (buf_size + 1));
+	tokens = malloc(sizeof(char *) * strlen(line) + 1);
 
 	if (tokens == NULL)
 	{
 		perror("Memory Allocation Failed");
 		free(line);
-		free(tokens);/*??*/
+		free(tokens);
 		exit(EXIT_FAILURE);
 	}
-	token = strtok(line, s);
+	token = strtok(line, delimeter);
 	while (token != NULL)
 	{
 		tokens[count] = malloc(strlen(token) + 1);
 		if (tokens[count] == NULL)
 		{
 			perror("Memory Allocation Failed");
-			free(tokens);/*??*/
+			free(tokens);
 			return (NULL);
 		}
-	strcpy(tokens[count], token);
-	token = strtok(NULL, s);
-	count++;
+	strcpy(tokens[count++], token);
+	token = strtok(NULL, delimeter);
 	}
 	tokens[count] = NULL;
 	return (tokens);
@@ -105,31 +118,27 @@ int execute(char **args, char *av)
 {
 	pid_t pid = 0;
 	int status = 0;
-	struct stat s;
 
-	if (stat(av, &s) == 0)
+	(void) av;
+
+	pid = fork();
+
+	if (pid == 0)
 	{
-		if (av)
-		{
-			pid = fork();
-
-			if (pid == 0)
-			{
-				if (execve(args[0], args, environ) == -1)
-					perror(av);
-				exit(EXIT_FAILURE);
-			}
-			else if (pid < 0)
-				perror(av);
-			else
-			{
-				do {
-					waitpid(pid, &status, WUNTRACED);
-				} while (!WIFEXITED(status) && !WIFSIGNALED(status));
-			}
-		}
+		if (execve(args[0], args, environ) == -1)
+			perror("Execve failure: -1");
+		exit(EXIT_FAILURE);
+	}
+	else if (pid < 0)
+	{
+		perror("Pid returned 0");
+		return (1);
 	}
 	else
-		perror(av);
+	{
+		do {
+			waitpid(pid, &status, WUNTRACED);
+		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
+	}
 	return (status);
 }

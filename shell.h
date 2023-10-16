@@ -10,8 +10,11 @@
 #include <sys/stat.h>
 #include <errno.h>
 
+#define BUFFER 1024
+
 extern char **environ;
+char **tokenize(char *line, const char *delimeter);
+int check_exec_path(char **str);
 int execute(char **args, char *av);
-char **tokenize(char *line, const char *s);
 
 #endif
