@@ -11,12 +11,12 @@ int main(int ac, char **av, char **env)
 	char *line, **args, *delimeter = " \n\t";
 	size_t bufsize;
 	ssize_t chars_count;
-	int i;
+	/*int i;*/
 
 	(void)ac;
 
 	line = NULL, args = NULL;
-	bufsize = 0, chars_count = 0, i = 0;
+	bufsize = 0, chars_count = 0/*, i = 0*/;
 
 	while (1)
 	{
@@ -37,8 +37,8 @@ int main(int ac, char **av, char **env)
 				get_env(env);
 				continue;
 			}
-			while (args[i] != NULL)
-				args[++i] = strtok(NULL, delimeter);
+			/*while (args[i] != NULL)
+				args[++i] = strtok(NULL, delimeter);*/
 			if (check_exec_path(&args[0], av[0]) == 1)
 				execute(&args[0], av[0], env);
 		}
