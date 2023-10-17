@@ -15,7 +15,7 @@ int check_exec_path(char **str, char *av)
 
 	if (access(*str, X_OK) == 0)
 		return (1);
-	path_copy = get_env_var("PATH");
+	path_copy = getenv("PATH");
 	if (path_copy == NULL)
 		return (0);
 	strcpy(path_buf, path_copy);

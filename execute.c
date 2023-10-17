@@ -6,7 +6,7 @@
  * @av: argument vector
  * Return: Status of process
  */
-int execute(char **args, char *av)
+int execute(char **args, char *av, char **env)
 {
 	pid_t pid = 0;
 	int status = 0;
@@ -15,7 +15,7 @@ int execute(char **args, char *av)
 
 	if (pid == 0)
 	{
-		if (execve(args[0], args, environ) == -1)
+		if (execve(args[0], args, env) == -1)
 			perror(av);
 		exit(EXIT_SUCCESS);
 	}

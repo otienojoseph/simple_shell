@@ -36,7 +36,7 @@ int space_check(char *line)
 
 	while (i < strlen(line) - 1)
 	{
-		if (line[i] != ' ' || line[i] != '\t' || line[i] != '\n')
+		if (line[i] != ' ')
 			return (0);
 		i++;
 	}
@@ -73,7 +73,7 @@ char *get_env_var(const char *env)
  */
 void check_getline_count(char *line)
 {
-	write(0, "\n", strlen("\n"));
+	write(0, "\n", 2);
 	free_and_exit(line);
 }
 
@@ -84,6 +84,8 @@ void check_getline_count(char *line)
  */
 void free_and_exit(char *line)
 {
-	free(line);
+	(void)line;
+
+	/* free(line); */
 	exit(EXIT_SUCCESS);
 }

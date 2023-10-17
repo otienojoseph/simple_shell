@@ -6,7 +6,7 @@
  * @av: argument vector
  * Return: 0 on success, non zero on failure
  */
-int main(int ac, char **av)
+int main(int ac, char **av, char **env)
 {
 	char *line, **args, *delimeter = " \n\t";
 	size_t bufsize;
@@ -34,13 +34,13 @@ int main(int ac, char **av)
 				free_and_exit(line);
 			else if (strcmp(args[0], "env") == 0)
 			{
-				get_env(environ);
+				get_env(env);
 				continue;
 			}
 			while (args[i] != NULL)
 				args[++i] = strtok(NULL, delimeter);
 			if (check_exec_path(&args[0], av[0]) == 1)
-				execute(&args[0], av[0]);
+				execute(&args[0], av[0], env);
 		}
 		line = NULL;
 		bufsize = 0;
