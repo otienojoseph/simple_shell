@@ -32,6 +32,7 @@ int check_exec_path(char **str, char *av)
 		strcpy(full_command, token);
 		strcat(full_command, "/");
 		strcat(full_command, *str);
+		strcat(full_command, "\0");
 		if (access(full_command, X_OK) == 0)
 		{
 			for (i = 0; full_command[i] != '\0'; i++)
