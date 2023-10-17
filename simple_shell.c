@@ -39,7 +39,7 @@ int main(int ac, char **av)
 			}
 			while (args[i] != NULL)
 				args[++i] = strtok(NULL, delimeter);
-			if (check_exec_path(&args[0]) == 1)
+			if (check_exec_path(&args[0], av[0]) == 1)
 				execute(&args[0], av[0]);
 		}
 		line = NULL;

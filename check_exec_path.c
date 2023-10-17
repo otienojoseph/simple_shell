@@ -4,9 +4,10 @@
  * check_exec_path - check if the command exist in the
  * path, if it does not creat a path and append it to the directory
  * @str: pointer to the command.
+ * @av: name of file
  * Return: return 1 on success, 0 on failure.
  */
-int check_exec_path(char **str)
+int check_exec_path(char **str, char *av)
 {
 	char *path_copy, *token, *full_command;
 	char path_buf[BUFFER], buffer[BUFFER];
@@ -21,10 +22,10 @@ int check_exec_path(char **str)
 	token = strtok(path_buf, ":");
 	while (token != NULL)
 	{
-		full_command = malloc(strlen(token) + strlen("/") + strlen(*str) + 1);
+		full_command = malloc(strlen(token) + strlen(*str) + 2);
 		if (full_command == NULL)
 		{
-			perror(*str);
+			perror(av);
 			free(full_command);
 			return (0);
 		}
@@ -43,6 +44,7 @@ int check_exec_path(char **str)
 		free(full_command);
 		token = strtok(NULL, ":");
 	}
-	perror(*str);
+	perror(av);
+
 	return (0);
 }
