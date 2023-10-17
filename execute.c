@@ -26,7 +26,8 @@ int execute(char **args, char *av)
 	}
 	else
 	{
-		do {
+		do
+		{
 			waitpid(pid, &status, WUNTRACED);
 		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
 	}

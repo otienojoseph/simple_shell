@@ -5,22 +5,23 @@
  * @line: String to be tokenized
  * @delimeter: delimeter given
  * Return: Array of strings
-*/
+ */
 char **tokenize(char *line, const char *delimeter)
 {
 	char *token = NULL, **tokens = NULL;
-	int count = 0;
+	int i, count = 0;
+	size_t line_len = strlen(line);
 
 	if (line == NULL)
 		return (NULL);
-	tokens = malloc(sizeof(char *) * strlen(line) + 1);
+	tokens = malloc(sizeof(char *) * (line_len + 1));
 
 	if (tokens == NULL)
 	{
 		perror("Memory Allocation Failed");
 		free(line);
 		free(tokens);
-		exit(EXIT_FAILURE);
+		return (NULL);
 	}
 	token = strtok(line, delimeter);
 	while (token != NULL)
@@ -29,13 +30,19 @@ char **tokenize(char *line, const char *delimeter)
 		if (tokens[count] == NULL)
 		{
 			perror("Memory Allocation Failed");
+			for (i = 0; i < count; i++)
+			{
+				free(tokens[i]);
+			}
 			free(tokens);
+			free(line);
 			return (NULL);
 		}
-	strcpy(tokens[count++], token);
-	token = strtok(NULL, delimeter);
+		strcpy(tokens[count], token);
+		count++;
+		token = strtok(NULL, delimeter);
 	}
 	tokens[count] = NULL;
-
+	free(line);
 	return (tokens);
 }
