@@ -33,12 +33,8 @@ int check_exec_path(char **str)
 		strcat(full_command, *str);
 		if (access(full_command, X_OK) == 0)
 		{
-			i = 0;
-			while (i < strlen(full_command))
-			{
+			for (i = 0; full_command[i] != '\0'; i++)
 				buffer[i] = full_command[i];
-				i++;
-			}
 			buffer[i] = '\0';
 			free(full_command);
 			*str = buffer;

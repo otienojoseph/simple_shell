@@ -76,7 +76,7 @@ char *get_env_var(const char *env)
 void check_getline_count(char *line)
 {
 			write(0, "\n", strlen("\n"));
-            free_and_exit(line);
+			free_and_exit(line);
 }
 
 /**
@@ -86,6 +86,6 @@ void check_getline_count(char *line)
  */
 void free_and_exit(char *line)
 {
-    free(line);
-    exit(EXIT_SUCCESS);
+	free(line);
+	exit(EXIT_SUCCESS);
 }
