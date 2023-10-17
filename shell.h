@@ -19,5 +19,7 @@ int execute(char **args, char *av);
 void get_env(char **env);
 int space_check(char *line);
 char *get_env_var(const char *env);
+void check_getline_count(char *line);
+void free_and_exit(char *line);
 
 #endif

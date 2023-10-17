@@ -67,3 +67,25 @@ char *get_env_var(const char *env)
 	}
 	return (NULL);
 }
+
+/**
+ * check_getline_count - Check getline return count
+ * @line: string to count from
+ * Return: 0 on success
+ */
+void check_getline_count(char *line)
+{
+			write(0, "\n", strlen("\n"));
+            free_and_exit(line);
+}
+
+/**
+ * free_and_exit - Free line pointer and exit
+ * @line: pointer
+ * Return: 0 on success
+ */
+void free_and_exit(char *line)
+{
+    free(line);
+    exit(EXIT_SUCCESS);
+}

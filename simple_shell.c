@@ -24,21 +24,14 @@ int main(int ac, char **av)
 			write(STDOUT_FILENO, "($) ", strlen("($) "));
 		chars_count = getline(&line, &bufsize, stdin);
 		if (chars_count == -1)
-		{
-			write(0, "\n", strlen("\n"));
-			free(line);
-			exit(EXIT_SUCCESS);
-		}
+			check_getline_count(line);
 		else if (space_check(line) == 1)
 			continue;
 		else
 		{
 			args = tokenize(line, delimeter);
 			if (strcmp(args[0], "exit") == 0)
-			{
-				free(line);
-				exit(EXIT_SUCCESS);
-			}
+				free_and_exit(line);
 			else if (strcmp(args[0], "env") == 0)
 			{
 				get_env(environ);
