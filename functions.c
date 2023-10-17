@@ -48,6 +48,7 @@ int space_check(char *line)
 /**
  * get_env_var - get the enviroment variables.
  * @env: pointer to a pointer to strings
+ * Return: env variable
  */
 char *get_env_var(const char *env)
 {
@@ -55,14 +56,14 @@ char *get_env_var(const char *env)
 	size_t length;
 
 	i = 0;
-    length = strlen(env);
+	length = strlen(env);
 	while (environ[i] != NULL)
 	{
 		if (strncmp(environ[i], env, length) == 0 && environ[i][length] == '=')
 		{
-            return (environ[i] + length + 1);
+			return (environ[i] + length + 1);
 		}
 		i++;
 	}
-    return (NULL);
+	return (NULL);
 }

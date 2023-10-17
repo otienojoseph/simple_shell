@@ -36,5 +36,6 @@ char **tokenize(char *line, const char *delimeter)
 	token = strtok(NULL, delimeter);
 	}
 	tokens[count] = NULL;
+
 	return (tokens);
 }
