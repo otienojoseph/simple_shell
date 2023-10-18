@@ -38,7 +38,6 @@ int main(int ac, char **av)
 			}
 			else if (strcmp(args[0], "env") == 0)
 			{
-				get_env(env);
 				get_env(environ);
 				free_double_pointer(args, line);
 				continue;
