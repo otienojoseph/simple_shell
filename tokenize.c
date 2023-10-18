@@ -19,8 +19,8 @@ char **tokenize(char *line, const char *delimeter)
 	if (tokens == NULL)
 	{
 		perror("Memory Allocation Failed");
-		free(line);
 		free(tokens);
+		free(line);
 		return (NULL);
 	}
 	token = strtok(line, delimeter);

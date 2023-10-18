@@ -7,14 +7,16 @@
  * @env: environment variable
  * Return: 0 on success, non zero on failure
  */
-int main(int __attribute__ ((unused))ac, char **av, char **env)
+int main(int ac, char **av)
 {
-	char *line, **args, *delimeter = " \n";
+	char *line, **args, **temp_args, *delimeter = " \n";
 	size_t bufsize;
 	ssize_t chars_count;
 	int i;
 
-	line = NULL, args = NULL;
+	(void)ac;
+
+	line = NULL;
 	bufsize = 0, chars_count = 0, i = 0;
 
 	while (1)
@@ -30,19 +32,26 @@ int main(int __attribute__ ((unused))ac, char **av, char **env)
 		{
 			args = tokenize(line, delimeter);
 			if (strcmp(args[0], "exit") == 0)
-				free_and_exit(line);
+			{
+				free_double_pointer(args, line);
+				exit(EXIT_SUCCESS);
+			}
 			else if (strcmp(args[0], "env") == 0)
 			{
 				get_env(env);
+				get_env(environ);
+				free_double_pointer(args, line);
 				continue;
 			}
-			while (args[i] != NULL)
+			temp_args = args;
+			while (temp_args[i] != NULL)
 			{
-				args[++i] = strtok(NULL, delimeter);
-				args[i] = NULL;
+				temp_args[++i] = strtok(NULL, delimeter);
+				temp_args[i] = NULL;
 			}
 			if (check_exec_path(&args[0], av[0]) == 1)
-				execute(&args[0], av[0], env);
+				execute(&args[0], av[0]);
+			/*free_double_pointer(args, line);*/
 		}
 		line = NULL;
 		bufsize = 0;
@@ -50,4 +59,3 @@ int main(int __attribute__ ((unused))ac, char **av, char **env)
 	}
 	return (0);
 }
-

@@ -73,19 +73,30 @@ char *get_env_var(const char *env)
  */
 void check_getline_count(char *line)
 {
-	write(0, "\n", 2);
-	free_and_exit(line);
+	write(0, "\n", strlen("\n"));
+	free(line);
+	exit(EXIT_SUCCESS);
 }
 
 /**
- * free_and_exit - Free line pointer and exit
- * @line: pointer
- * Return: 0 on success
+ * free_double_pointer - Free args memory
+ * @args: argument tokens
+ * Return: void
  */
-void free_and_exit(char *line)
+void free_double_pointer(char **args, char *line)
 {
+	int i;
+
 	(void)line;
 
-	/*free(line);*/ /*causes double free error*/
-	exit(EXIT_SUCCESS);
+	/*free(line);*/
+	if (args == NULL)
+		return;
+
+	for (i = 0; args[i] != NULL; i++)
+	{
+		free(args[i]);
+		args[i] = NULL;
+	}
+	free(args);
 }
