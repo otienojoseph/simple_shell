@@ -22,7 +22,7 @@ int check_exec_path(char **str, char *av)
 	token = strtok(path_buf, ":");
 	while (token != NULL)
 	{
-		full_command = malloc(strlen(token) + strlen(*str) + 2);
+		full_command = malloc(strlen(token) + strlen(*str) + 3);
 		if (full_command == NULL)
 		{
 			perror(av);
@@ -32,7 +32,7 @@ int check_exec_path(char **str, char *av)
 		strcpy(full_command, token);
 		strcat(full_command, "/");
 		strcat(full_command, *str);
-		strcat(full_command, "\0");
+		/*strcat(full_command, "\0");*/
 		if (access(full_command, X_OK) == 0)
 		{
 			for (i = 0; full_command[i] != '\0'; i++)
@@ -46,6 +46,5 @@ int check_exec_path(char **str, char *av)
 		token = strtok(NULL, ":");
 	}
 	perror(av);
-
 	return (0);
 }

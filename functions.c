@@ -86,6 +86,6 @@ void free_and_exit(char *line)
 {
 	(void)line;
 
-	/* free(line); */
+	/*free(line);*/ /*causes double free error*/
 	exit(EXIT_SUCCESS);
 }

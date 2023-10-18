@@ -4,6 +4,7 @@
  * execute - creates child process for commands
  * @args: commands entered
  * @av: argument vector
+ * @env: environment of command
  * Return: Status of process
  */
 int execute(char **args, char *av, char **env)
@@ -26,8 +27,7 @@ int execute(char **args, char *av, char **env)
 	}
 	else
 	{
-		do
-		{
+		do {
 			waitpid(pid, &status, WUNTRACED);
 		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
 	}
