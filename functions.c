@@ -81,6 +81,7 @@ void check_getline_count(char *line)
 /**
  * free_double_pointer - Free args memory
  * @args: argument tokens
+ * @line: string to free
  * Return: void
  */
 void free_double_pointer(char **args, char *line)

@@ -21,5 +21,6 @@ int space_check(char *line);
 char *get_env_var(const char *env);
 void check_getline_count(char *line);
 void free_double_pointer(char **args, char *line);
+void exit_function(char *line);
 
 #endif

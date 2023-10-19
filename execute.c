@@ -18,7 +18,7 @@ int execute(char **args, char *av, char **env)
 
 	if (pid == 0)
 	{
-		if (execve(args[0], args, NULL) == -1)
+		if (execve(args[0], args, environ) == -1)
 			perror(av);
 		exit(EXIT_SUCCESS);
 	}
@@ -29,8 +29,7 @@ int execute(char **args, char *av, char **env)
 	}
 	else
 	{
-		do
-		{
+		do {
 			waitpid(pid, &status, WUNTRACED);
 		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
 	}
